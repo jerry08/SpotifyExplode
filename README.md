@@ -245,7 +245,7 @@ await foreach (var result in spotify.Search.GetResultsAsync("banda neira"))
                 var tracks = album.Tracks;
                 break;
             }
-		case ArtistSearchResult artist:
+	case ArtistSearchResult artist:
             {
                 var id = artist.Id;
                 var title = artist.Name;
