@@ -5,7 +5,7 @@
 
 <p align="center">
    <a href="https://discord.gg/mhxsSMy2Nf"><img src="https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white"></a>
-   <a href="https://github.com/jerry08/SpotifyExplode"><img src="https://img.shields.io/nuget/dt/SpotifyExplode.svg?label=Downloads&color=%233DDC84&logo=nuget&logoColor=%23fff&style=for-the-badge"></a>
+   <a href="https://nuget.org/packages/SpotifyExplode"><img src="https://img.shields.io/nuget/dt/SpotifyExplode.svg?label=Downloads&color=%233DDC84&logo=nuget&logoColor=%23fff&style=for-the-badge"></a>
 </p>
 
 **SpotifyExplode** is a library that provides an interface to query metadata of Spotify tracks, playlists, albums, artists and users.
