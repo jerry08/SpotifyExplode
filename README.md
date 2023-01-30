@@ -34,7 +34,7 @@ using SpotifyExplode;
 var spotify = new SpotifyClient();
 
 var track = await spotify.Tracks.GetAsync(
-	"https://open.spotify.com/track/0VjIjW4GlUZAMYd2vXMi3b"
+    "https://open.spotify.com/track/0VjIjW4GlUZAMYd2vXMi3b"
 );
 
 var title = track.Title;
