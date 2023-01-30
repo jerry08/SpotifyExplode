@@ -32,7 +32,7 @@ public class Track
     public int DiscNumber { get; set; }
 
     [JsonProperty("duration_ms")]
-    public long DuationMs { get; set; }
+    public long DurationMs { get; set; }
 
     [JsonProperty("explicit")]
     public bool Explicit { get; set; }
