@@ -208,7 +208,6 @@ var user = await spotify.Users.GetAsync(
 var name = user.DisplayName;
 var followers = user.Followers;
 var images = user.Images;
-...
 ```
 
 ### Searching
