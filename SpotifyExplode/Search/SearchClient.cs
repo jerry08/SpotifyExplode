@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
@@ -85,4 +86,48 @@ public class SearchClient
 
         return results;
     }
+
+    /// <summary>
+    /// Gets album search results returned by the specified query.
+    /// </summary>
+    public async ValueTask<List<AlbumSearchResult>> GetAlbumsAsync(
+        string query,
+        int offset = Constants.DefaultOffset,
+        int limit = Constants.DefaultLimit,
+        CancellationToken cancellationToken = default) =>
+        (await GetResultsAsync(query, SearchFilter.Album, offset, limit, cancellationToken))
+            .OfType<AlbumSearchResult>().ToList();
+
+    /// <summary>
+    /// Gets artist search results returned by the specified query.
+    /// </summary>
+    public async ValueTask<List<ArtistSearchResult>> GetArtistsAsync(
+        string query,
+        int offset = Constants.DefaultOffset,
+        int limit = Constants.DefaultLimit,
+        CancellationToken cancellationToken = default) =>
+        (await GetResultsAsync(query, SearchFilter.Artist, offset, limit, cancellationToken))
+            .OfType<ArtistSearchResult>().ToList();
+
+    /// <summary>
+    /// Gets playlist search results returned by the specified query.
+    /// </summary>
+    public async ValueTask<List<PlaylistSearchResult>> GetPlaylistsAsync(
+        string query,
+        int offset = Constants.DefaultOffset,
+        int limit = Constants.DefaultLimit,
+        CancellationToken cancellationToken = default) =>
+        (await GetResultsAsync(query, SearchFilter.Playlist, offset, limit, cancellationToken))
+            .OfType<PlaylistSearchResult>().ToList();
+
+    /// <summary>
+    /// Gets track search results returned by the specified query.
+    /// </summary>
+    public async ValueTask<List<TrackSearchResult>> GetTracksAsync(
+        string query,
+        int offset = Constants.DefaultOffset,
+        int limit = Constants.DefaultLimit,
+        CancellationToken cancellationToken = default) =>
+        (await GetResultsAsync(query, SearchFilter.Track, offset, limit, cancellationToken))
+            .OfType<TrackSearchResult>().ToList();
 }
