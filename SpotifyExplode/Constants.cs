@@ -8,5 +8,5 @@ internal static class Constants
 
     public const int MinLimit = 0;
 
-    public const int MaxLimit = 100;
+    public const int MaxLimit = 50;
 }
