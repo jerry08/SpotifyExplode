@@ -258,7 +258,7 @@ await foreach (var result in spotify.Search.GetResultsAsync("banda neira"))
 ### Downloading
 You can get the download url from a track by calling `Tracks.GetYoutubeIdAsync(...)`.
 
-```
+```csharp
 using SpotifyExplode;
 
 var spotify = new SpotifyClient();
@@ -272,7 +272,7 @@ var downloadUrl = await spotify.Tracks.GetDownloadUrlAsync(
 ### Extras
 You can get a Youtube ID from a track by calling `Tracks.GetYoutubeIdAsync(...)`.
 
-```
+```csharp
 using SpotifyExplode;
 
 var spotify = new SpotifyClient();
