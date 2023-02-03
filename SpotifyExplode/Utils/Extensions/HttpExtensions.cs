@@ -171,7 +171,9 @@ internal static class HttpExtensions
         {
             request.Headers.Add(
                 "User-Agent",
-                Http.ChromeUserAgent()
+                //The generated user-agent will not work on mobile devices in some cases.
+                //Http.ChromeUserAgent()
+                "Other"
             );
         }
 
