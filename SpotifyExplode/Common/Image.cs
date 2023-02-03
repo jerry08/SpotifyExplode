@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace SpotifyExplode;
+namespace SpotifyExplode.Common;
 
 public class Image
 {

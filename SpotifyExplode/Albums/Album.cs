@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Newtonsoft.Json;
 using SpotifyExplode.Artists;
+using SpotifyExplode.Common;
 using SpotifyExplode.Tracks;
 
 namespace SpotifyExplode.Albums;
