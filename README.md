@@ -8,7 +8,7 @@
    <a href="https://nuget.org/packages/SpotifyExplode"><img src="https://img.shields.io/nuget/dt/SpotifyExplode.svg?label=Downloads&color=%233DDC84&logo=nuget&logoColor=%23fff&style=for-the-badge"></a>
 </p>
 
-**SpotifyExplode** is a library that provides an interface to query metadata of Spotify tracks, playlists, albums, artists and users.
+**SpotifyExplode** is a library that provides an interface to query metadata of Spotify tracks, playlists, albums, artists and users as well as to download audio.
 
 ### 🌟STAR THIS REPOSITORY TO SUPPORT THE DEVELOPER AND ENCOURAGE THE DEVELOPMENT OF THIS PROJECT!
 
@@ -211,7 +211,7 @@ var images = user.Images;
 ```
 
 ### Searching
-You can execute a search query and get its results by calling Search.GetResultsAsync(...). Each result may represent either an album, artist, track or playlist, so you need to apply pattern matching to handle the corresponding cases:
+You can execute a search query and get its results by calling `Search.GetResultsAsync(...)`. Each result may represent either an album, artist, track or playlist, so you need to apply pattern matching to handle the corresponding cases:
 
 ```csharp
 using SpotifyExplode;
@@ -253,4 +253,33 @@ await foreach (var result in spotify.Search.GetResultsAsync("banda neira"))
             }
     }
 }
+```
+
+### Downloading
+You can get the download url from a track by calling `Tracks.GetYoutubeIdAsync(...)`.
+
+```
+using SpotifyExplode;
+
+var spotify = new SpotifyClient();
+
+var downloadUrl = await spotify.Tracks.GetDownloadUrlAsync(
+    "https://open.spotify.com/track/0VjIjW4GlUZAMYd2vXMi3b"
+);
+// Start download from the url provided...
+```
+
+### Extras
+You can get a Youtube ID from a track by calling `Tracks.GetYoutubeIdAsync(...)`.
+
+```
+using SpotifyExplode;
+
+var spotify = new SpotifyClient();
+
+var youtubeId = await spotify.Tracks.GetYoutubeIdAsync(
+    "https://open.spotify.com/track/0VjIjW4GlUZAMYd2vXMi3b"
+);
+
+var youtubeUrl = "https://youtube.com/watch?v=" + youtubeId;
 ```
