@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SpotifyExplode.Exceptions;
 using SpotifyExplode.Tracks;
+using SpotifyExplode.Users;
 
 namespace SpotifyExplode.Playlists;
 
@@ -50,7 +51,6 @@ public class PlaylistClient
     /// <param name="offset"></param>
     /// <param name="limit">Limit should not exceed 100 according to Spotify</param>
     /// <param name="cancellationToken"></param>
-    /// <returns></returns>
     /// <exception cref="RequestLimitExceededException"></exception>
     public async ValueTask<List<Item>> GetItemsAsync(
         PlaylistId playlistId,
@@ -61,20 +61,40 @@ public class PlaylistClient
         if (limit is < Constants.MinLimit or > Constants.MaxLimit)
             throw new SpotifyExplodeException($"Limit must be between {Constants.MinLimit} and {Constants.MaxLimit}");
 
-        var playlist = await _spotifyHttp.GetAsync(
+        var response = await _spotifyHttp.GetAsync(
             $"https://api.spotify.com/v1/playlists/{playlistId}/tracks?offset={offset}&limit={limit}",
             cancellationToken
         );
 
-        var playlistJObj = JObject.Parse(playlist);
-        var tracksItems = JObject.Parse(playlist)["tracks"]?["items"]?.ToString() ?? playlistJObj["items"]?.ToString();
+        var playlistJObj = JObject.Parse(response);
 
-        if (tracksItems is null)
-            return new();
+        var tracksItems = playlistJObj["tracks"]?["items"]?.ToString()
+            ?? playlistJObj["items"]?.ToString();
 
-        return JsonConvert.DeserializeObject<List<Item>>(tracksItems)!;
+        var list = new List<Item>();
+
+        if (string.IsNullOrEmpty(tracksItems))
+            return list;
+
+        foreach (var token in JArray.Parse(tracksItems!))
+        {
+            var item = JsonConvert.DeserializeObject<Item>(token.ToString())!;
+
+            var userId = token["added_by"]?["id"]?.ToString();
+            if (!string.IsNullOrEmpty(userId))
+            {
+                item.AddedBy = JsonConvert.DeserializeObject<User>(token["added_by"]!.ToString())!;
+            }
+
+            list.Add(item);
+        }
+
+        return list;
     }
 
+    /// <summary>
+    /// Gets the items associated with the specified playlist.
+    /// </summary>
     public async ValueTask<List<Item>> GetAllItemsAsync(
         PlaylistId playlistId,
         CancellationToken cancellationToken = default)
@@ -103,6 +123,9 @@ public class PlaylistClient
         return playlistItems;
     }
 
+    /// <summary>
+    /// Gets the tracks associated with the specified playlist.
+    /// </summary>
     public async ValueTask<List<Track>> GetTracksAsync(
         PlaylistId playlistId,
         int offset = Constants.DefaultOffset,
@@ -111,6 +134,9 @@ public class PlaylistClient
         (await GetItemsAsync(playlistId, offset, limit, cancellationToken))
             .ConvertAll(x => x.Track);
 
+    /// <summary>
+    /// Gets all the tracks associated with the specified playlist.
+    /// </summary>
     public async ValueTask<List<Track>> GetAllTracksAsync(
         PlaylistId playlistId,
         CancellationToken cancellationToken = default) =>

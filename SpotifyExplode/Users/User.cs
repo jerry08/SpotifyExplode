@@ -1,8 +1,7 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using Newtonsoft.Json;
 using SpotifyExplode.Common;
 using SpotifyExplode.Playlists;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace SpotifyExplode.Users;
 
