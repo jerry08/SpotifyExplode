@@ -74,7 +74,13 @@ public class TrackClient
         TrackId trackId,
         CancellationToken cancellationToken = default)
     {
-        var url = await GetSpotifyDownloaderUrlAsync(trackId, cancellationToken);
+        var url = "";
+
+        try
+        {
+            url = await GetSpotifyDownloaderUrlAsync(trackId, cancellationToken);
+        }
+        catch { }
 
         // Fallback
         if (string.IsNullOrEmpty(url))
