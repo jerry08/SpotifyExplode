@@ -51,6 +51,11 @@ public class TrackClient
     {
         var response = await _http.ExecuteAsync(
             $"https://api.spotifydown.com/getId/{trackId}",
+            new()
+            {
+                { "referer", "https://spotifydown.com/" },
+                { "origin", "https://spotifydown.com" }
+            },
             cancellationToken
         );
 
