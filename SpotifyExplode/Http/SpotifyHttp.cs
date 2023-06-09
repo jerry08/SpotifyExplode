@@ -1,9 +1,8 @@
-﻿using System;
-using System.Net.Http;
+﻿using System.Net.Http;
 using System.Net.Http.Headers;
+using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json.Linq;
 using SpotifyExplode.Utils.Extensions;
 
 namespace SpotifyExplode;
@@ -38,8 +37,8 @@ internal class SpotifyHttp
 
         var tokenJson = await _http.ExecuteAsync(request, cancellationToken);
 
-        var spotifyJsonToken = JObject.Parse(tokenJson);
+        var spotifyJsonToken = JsonNode.Parse(tokenJson)!;
 
-        return spotifyJsonToken.SelectToken("accessToken")!.ToString();
+        return spotifyJsonToken["accessToken"]!.ToString();
     }
 }

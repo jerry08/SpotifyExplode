@@ -2,11 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using SpotifyExplode.Exceptions;
+using SpotifyExplode.Utils;
 
 namespace SpotifyExplode.Search;
 
@@ -64,23 +65,23 @@ public class SearchClient
         switch (searchFilter)
         {
             case SearchFilter.Album:
-                var albums = JObject.Parse(response)["albums"]!["items"]!.ToString();
-                results.AddRange(JsonConvert.DeserializeObject<List<AlbumSearchResult>>(albums)!);
+                var albums = JsonNode.Parse(response)!["albums"]!["items"]!.ToString();
+                results.AddRange(JsonSerializer.Deserialize<List<AlbumSearchResult>>(albums, JsonDefaults.Options)!);
                 break;
 
             case SearchFilter.Artist:
-                var artists = JObject.Parse(response)["artists"]!["items"]!.ToString();
-                results.AddRange(JsonConvert.DeserializeObject<List<ArtistSearchResult>>(artists)!);
+                var artists = JsonNode.Parse(response)!["artists"]!["items"]!.ToString();
+                results.AddRange(JsonSerializer.Deserialize<List<ArtistSearchResult>>(artists, JsonDefaults.Options)!);
                 break;
 
             case SearchFilter.Playlist:
-                var playlists = JObject.Parse(response)["playlists"]!["items"]!.ToString();
-                results.AddRange(JsonConvert.DeserializeObject<List<PlaylistSearchResult>>(playlists)!);
+                var playlists = JsonNode.Parse(response)!["playlists"]!["items"]!.ToString();
+                results.AddRange(JsonSerializer.Deserialize<List<PlaylistSearchResult>>(playlists, JsonDefaults.Options)!);
                 break;
 
             case SearchFilter.Track:
-                var tracks = JObject.Parse(response)["tracks"]!["items"]!.ToString();
-                results.AddRange(JsonConvert.DeserializeObject<List<TrackSearchResult>>(tracks)!);
+                var tracks = JsonNode.Parse(response)!["tracks"]!["items"]!.ToString();
+                results.AddRange(JsonSerializer.Deserialize<List<TrackSearchResult>>(tracks, JsonDefaults.Options)!);
                 break;
         }
 

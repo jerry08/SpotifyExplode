@@ -1,12 +1,12 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace SpotifyExplode.Playlists;
 
 public class Follower
 {
-    [JsonProperty("href")]
+    [JsonPropertyName("href")]
     public string? Link { get; set; }
 
-    [JsonProperty("total")]
+    [JsonPropertyName("total")]
     public int Total { get; set; }
 }

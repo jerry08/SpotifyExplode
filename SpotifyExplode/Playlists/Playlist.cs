@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using SpotifyExplode.Tracks;
 using SpotifyExplode.Users;
 
@@ -7,22 +7,22 @@ namespace SpotifyExplode.Playlists;
 
 public class Playlist
 {
-    [JsonProperty("id")]
+    [JsonPropertyName("id")]
     public PlaylistId Id { get; set; }
 
-    [JsonProperty("name")]
+    [JsonPropertyName("name")]
     public string Name { get; set; } = default!;
 
-    [JsonProperty("description")]
+    [JsonPropertyName("description")]
     public string Description { get; set; } = default!;
 
-    [JsonProperty("followers")]
+    [JsonPropertyName("followers")]
     public Follower Followers { get; set; } = default!;
 
-    [JsonProperty("owner")]
+    [JsonPropertyName("owner")]
     public User Owner { get; set; } = default!;
 
-    [JsonProperty("items")]
+    [JsonPropertyName("items")]
     public List<Item> Items { get; set; } = default!;
 
     /// <summary>
@@ -35,19 +35,19 @@ public class Playlist
     /// the response contains 3 artists and 3 albums.
     /// </summary>
     /// <value></value>
-    [JsonProperty("limit")]
+    [JsonPropertyName("limit")]
     public int Limit { get; set; }
 
-    //[JsonProperty("next")]
+    //[JsonPropertyName("next")]
     //public PlaylistId? Next { get; set; }
 
-    [JsonProperty("offset")]
+    [JsonPropertyName("offset")]
     public int Offset { get; set; }
 
-    //[JsonProperty("previous")]
+    //[JsonPropertyName("previous")]
     //public PlaylistId? Previous { get; set; }
 
-    [JsonProperty("total")]
+    [JsonPropertyName("total")]
     public int Total { get; set; }
 
     [JsonIgnore]

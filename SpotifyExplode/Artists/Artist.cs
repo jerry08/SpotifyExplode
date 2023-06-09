@@ -1,28 +1,28 @@
-﻿using Newtonsoft.Json;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 using SpotifyExplode.Common;
 using SpotifyExplode.Playlists;
-using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 
 namespace SpotifyExplode.Artists;
 
 public class Artist
 {
-    [JsonProperty("id")]
+    [JsonPropertyName("id")]
+    //[JsonConverter(typeof(ArtistIdJsonConverter))]
     public ArtistId Id { get; set; }
 
-    [JsonProperty("name")]
+    [JsonPropertyName("name")]
     public string Name { get; set; } = default!;
 
-    [JsonProperty("followers")]
+    [JsonPropertyName("followers")]
     public Follower Followers { get; set; } = default!;
 
-    [JsonProperty("genres")]
+    [JsonPropertyName("genres")]
     public List<string> Genres { get; set; } = default!;
 
-    [JsonProperty("images")]
+    [JsonPropertyName("images")]
     public List<Image> Images { get; set; } = default!;
 
-    [JsonProperty("popularity")]
+    [JsonPropertyName("popularity")]
     public int Popularity { get; set; }
 }

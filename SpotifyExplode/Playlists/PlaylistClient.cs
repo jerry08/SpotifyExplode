@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using SpotifyExplode.Exceptions;
 using SpotifyExplode.Tracks;
 using SpotifyExplode.Users;
+using SpotifyExplode.Utils;
 
 namespace SpotifyExplode.Playlists;
 
@@ -35,11 +36,11 @@ public class PlaylistClient
             cancellationToken
         );
 
-        var playlistJObj = JObject.Parse(response);
-        var tracksItems = playlistJObj["tracks"]?["items"]?.ToString() ?? playlistJObj["items"]!.ToString();
+        var playlistJObj = JsonNode.Parse(response);
+        var tracksItems = playlistJObj!["tracks"]?["items"]?.ToString() ?? playlistJObj["items"]!.ToString();
 
-        var palylist = JsonConvert.DeserializeObject<Playlist>(response)!;
-        palylist.Items = JsonConvert.DeserializeObject<List<Item>>(tracksItems)!;
+        var palylist = JsonSerializer.Deserialize<Playlist>(response, JsonDefaults.Options)!;
+        palylist.Items = JsonSerializer.Deserialize<List<Item>>(tracksItems, JsonDefaults.Options)!;
 
         return palylist;
     }
@@ -66,9 +67,9 @@ public class PlaylistClient
             cancellationToken
         );
 
-        var playlistJObj = JObject.Parse(response);
+        var playlistJObj = JsonNode.Parse(response);
 
-        var tracksItems = playlistJObj["tracks"]?["items"]?.ToString()
+        var tracksItems = playlistJObj!["tracks"]?["items"]?.ToString()
             ?? playlistJObj["items"]?.ToString();
 
         var list = new List<Item>();
@@ -76,14 +77,17 @@ public class PlaylistClient
         if (string.IsNullOrEmpty(tracksItems))
             return list;
 
-        foreach (var token in JArray.Parse(tracksItems!))
+        foreach (var token in JsonNode.Parse(tracksItems!)!.AsArray())
         {
-            var item = JsonConvert.DeserializeObject<Item>(token.ToString())!;
+            var item = JsonSerializer.Deserialize<Item>(token!.ToString(), JsonDefaults.Options)!;
 
             var userId = token["added_by"]?["id"]?.ToString();
             if (!string.IsNullOrEmpty(userId))
             {
-                item.AddedBy = JsonConvert.DeserializeObject<User>(token["added_by"]!.ToString())!;
+                item.AddedBy = JsonSerializer.Deserialize<User>(
+                    token["added_by"]!.ToString(),
+                    JsonDefaults.Options
+                )!;
             }
 
             list.Add(item);

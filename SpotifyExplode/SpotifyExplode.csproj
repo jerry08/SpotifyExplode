@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net5.0;netstandard2.1;netstandard2.0;net461;netcoreapp3.1</TargetFrameworks>
+    <TargetFrameworks>net6.0;net5.0;netstandard2.1;netstandard2.0;net461;netcoreapp3.1</TargetFrameworks>
     <IsPackable>true</IsPackable>
     <Description>Spotify API Wrapper</Description>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
@@ -11,13 +11,12 @@
     <Reference Include="System.Net.Http" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'netstandard2.0' or '$(TargetFramework)' == 'netstandard2.1' or '$(TargetFramework)' == 'net461'">
-    <PackageReference Include="System.Text.Json" Version="6.0.7" />
+  <ItemGroup Condition="'$(TargetFrameworkIdentifier)' != '.NETCoreApp' or '$(TargetFramework)' == 'netcoreapp3.1' or '$(TargetFramework)' == 'net5.0'">
+    <PackageReference Include="System.Text.Json" Version="7.0.2" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="HtmlAgilityPack" Version="1.11.46" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.2" />
   </ItemGroup>
 
 </Project>

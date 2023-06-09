@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using SpotifyExplode.Artists;
 using SpotifyExplode.Common;
 using SpotifyExplode.Tracks;
@@ -10,44 +10,44 @@ namespace SpotifyExplode.Albums;
 
 public class Album
 {
-    [JsonProperty("id")]
+    [JsonPropertyName("id")]
     public AlbumId Id { get; set; }
 
     public string Url => $"https://open.spotify.com/track/{Id}";
 
-    [JsonProperty("label")]
+    [JsonPropertyName("label")]
     public string Label { get; set; } = default!;
 
-    [JsonProperty("name")]
+    [JsonPropertyName("name")]
     public string Name { get; set; } = default!;
 
-    [JsonProperty("album_type")]
+    [JsonPropertyName("album_type")]
     public AlbumType AlbumType { get; set; }
 
-    [JsonProperty("popularity")]
+    [JsonPropertyName("popularity")]
     public int Popularity { get; set; }
 
-    [JsonProperty("release_date")]
+    [JsonPropertyName("release_date")]
     public string ReleaseDateStr { get; set; } = default!;
 
     public DateTime? ReleaseDate => DateTime.TryParse(ReleaseDateStr, out DateTime releaseDate) ? releaseDate : null;
 
-    [JsonProperty("total_tracks")]
+    [JsonPropertyName("total_tracks")]
     public int TotalTracks { get; set; }
 
     [JsonIgnore]
     public List<Track> Tracks { get; set; } = default!;
 
-    [JsonProperty("available_markets")]
+    [JsonPropertyName("available_markets")]
     public List<string> AvailableMarkets { get; set; } = default!;
 
-    [JsonProperty("artists")]
+    [JsonPropertyName("artists")]
     public List<Artist> Artists { get; set; } = default!;
 
-    [JsonProperty("images")]
+    [JsonPropertyName("images")]
     public List<Image> Images { get; set; } = default!;
 
-    [JsonProperty("genres")]
+    [JsonPropertyName("genres")]
     public List<string> Genres { get; set; } = default!;
 
     /// <inheritdoc />

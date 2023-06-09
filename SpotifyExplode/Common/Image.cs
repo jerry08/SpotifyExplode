@@ -1,15 +1,15 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace SpotifyExplode.Common;
 
 public class Image
 {
-    [JsonProperty("url")]
+    [JsonPropertyName("url")]
     public string Url { get; set; } = default!;
 
-    [JsonProperty("height")]
+    [JsonPropertyName("height")]
     public int? Height { get; set; }
 
-    [JsonProperty("width")]
+    [JsonPropertyName("width")]
     public int? Width { get; set; }
 }

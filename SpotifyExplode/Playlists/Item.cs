@@ -1,5 +1,5 @@
 ﻿using System;
-using Newtonsoft.Json;
+using System.Text.Json.Serialization;
 using SpotifyExplode.Tracks;
 using SpotifyExplode.Users;
 
@@ -7,11 +7,11 @@ namespace SpotifyExplode.Playlists;
 
 public class Item
 {
-    [JsonProperty("added_at")]
+    [JsonPropertyName("added_at")]
     public DateTime AddedAt { get; set; }
 
     public User? AddedBy { get; set; }
 
-    [JsonProperty("track")]
+    [JsonPropertyName("track")]
     public Track Track { get; set; } = default!;
 }

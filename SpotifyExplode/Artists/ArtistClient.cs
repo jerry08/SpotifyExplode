@@ -1,11 +1,12 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using SpotifyExplode.Albums;
-using SpotifyExplode.Exceptions;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Net.Http;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
+using SpotifyExplode.Albums;
+using SpotifyExplode.Exceptions;
+using SpotifyExplode.Utils;
 
 namespace SpotifyExplode.Artists;
 
@@ -34,7 +35,7 @@ public class ArtistClient
             cancellationToken
         );
 
-        return JsonConvert.DeserializeObject<Artist>(response)!;
+        return JsonSerializer.Deserialize<Artist>(response, JsonDefaults.Options)!;
     }
 
     /// <summary>
@@ -55,9 +56,9 @@ public class ArtistClient
             cancellationToken
         );
 
-        var artistAlbums = JObject.Parse(response)["items"]!.ToString();
+        var artistAlbums = JsonNode.Parse(response)!["items"]!.ToString();
 
-        return JsonConvert.DeserializeObject<List<Album>>(artistAlbums)!;
+        return JsonSerializer.Deserialize<List<Album>>(artistAlbums, JsonDefaults.Options)!;
     }
 
     /// <summary>

@@ -1,11 +1,12 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using System.Collections.Generic;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using SpotifyExplode.Tracks;
-using SpotifyExplode.Exceptions;
+﻿using System.Collections.Generic;
 using System.Net.Http;
+using System.Text.Json;
+using System.Text.Json.Nodes;
+using System.Threading;
+using System.Threading.Tasks;
+using SpotifyExplode.Exceptions;
+using SpotifyExplode.Tracks;
+using SpotifyExplode.Utils;
 
 namespace SpotifyExplode.Albums;
 
@@ -34,12 +35,12 @@ public class AlbumClient
             cancellationToken
         );
 
-        var album = JsonConvert.DeserializeObject<Album>(response)!;
+        var album = JsonSerializer.Deserialize<Album>(response, JsonDefaults.Options)!;
 
-        var items = JObject.Parse(response)["tracks"]?["items"]?.ToString();
+        var items = JsonNode.Parse(response)!["tracks"]?["items"]?.ToString();
         if (!string.IsNullOrEmpty(items))
         {
-            var albumTracks = JsonConvert.DeserializeObject<List<Track>>(items!)!;
+            var albumTracks = JsonSerializer.Deserialize<List<Track>>(items!, JsonDefaults.Options)!;
             albumTracks.ForEach(track => track.Album = album);
             album.Tracks = albumTracks;
         }
@@ -64,9 +65,9 @@ public class AlbumClient
             cancellationToken
         );
 
-        var albumTracks = JObject.Parse(response)["items"]!.ToString();
+        var albumTracks = JsonNode.Parse(response)!["items"]!.ToString();
 
-        return JsonConvert.DeserializeObject<List<Track>>(albumTracks)!;
+        return JsonSerializer.Deserialize<List<Track>>(albumTracks, JsonDefaults.Options)!;
     }
 
     /// <summary>

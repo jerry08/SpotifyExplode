@@ -1,7 +1,8 @@
-﻿using Newtonsoft.Json;
-using System.Net.Http;
+﻿using System.Net.Http;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using SpotifyExplode.Utils;
 
 namespace SpotifyExplode.Users;
 
@@ -30,6 +31,6 @@ public class UserClient
             cancellationToken
         );
 
-        return JsonConvert.DeserializeObject<User>(response)!;
+        return JsonSerializer.Deserialize<User>(response, JsonDefaults.Options)!;
     }
 }

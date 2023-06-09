@@ -1,11 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Net.Http;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using SpotifyExplode.Exceptions;
+using SpotifyExplode.Utils;
 using SpotifyExplode.Utils.Extensions;
 
 namespace SpotifyExplode.Tracks;
@@ -39,7 +40,7 @@ public class TrackClient
             cancellationToken
         );
 
-        return JsonConvert.DeserializeObject<Track>(response)!;
+        return JsonSerializer.Deserialize<Track>(response, JsonDefaults.Options)!;
     }
 
     /// <summary>
@@ -62,14 +63,14 @@ public class TrackClient
         if (string.IsNullOrEmpty(response))
             return null;
 
-        var data = JObject.Parse(response);
+        var data = JsonNode.Parse(response)!;
 
         bool.TryParse(data["success"]?.ToString(), out var success);
 
         if (!success)
             throw new SpotifyExplodeException(data["message"]!.ToString());
 
-        return JObject.Parse(response)?["id"]!.ToString();
+        return JsonNode.Parse(response)?["id"]!.ToString();
     }
 
     /// <summary>
@@ -142,6 +143,6 @@ public class TrackClient
             cancellationToken
         );
 
-        return JObject.Parse(response)["audio"]?["url"]?.ToString();
+        return JsonNode.Parse(response)!["audio"]?["url"]?.ToString();
     }
 }

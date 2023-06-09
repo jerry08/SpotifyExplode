@@ -1,10 +1,10 @@
 ﻿using System.Net.Http;
-using SpotifyExplode.Search;
-using SpotifyExplode.Tracks;
 using SpotifyExplode.Albums;
 using SpotifyExplode.Artists;
-using SpotifyExplode.Users;
 using SpotifyExplode.Playlists;
+using SpotifyExplode.Search;
+using SpotifyExplode.Tracks;
+using SpotifyExplode.Users;
 
 namespace SpotifyExplode;
 
