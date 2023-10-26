@@ -218,7 +218,7 @@ using SpotifyExplode;
 
 var spotify = new SpotifyClient();
 
-await foreach (var result in spotify.Search.GetResultsAsync("banda neira"))
+foreach (var result in await spotify.Search.GetResultsAsync("banda neira"))
 {
     // Use pattern matching to handle different results (albums, artists, tracks, playlists)
     switch (result)
@@ -248,7 +248,6 @@ await foreach (var result in spotify.Search.GetResultsAsync("banda neira"))
             {
                 var id = artist.Id;
                 var title = artist.Name;
-                var albums = artist.Albums;
                 break;
             }
     }
