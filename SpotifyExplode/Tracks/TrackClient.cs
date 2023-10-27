@@ -51,8 +51,9 @@ public class TrackClient
         CancellationToken cancellationToken = default)
     {
         var response = await _http.ExecuteAsync(
+            //$"https://api.spotifydown.com/metadata/track/{trackId}",
             $"https://api.spotifydown.com/getId/{trackId}",
-            new()
+            new Dictionary<string, string>()
             {
                 { "referer", "https://spotifydown.com/" },
                 { "origin", "https://spotifydown.com" }
@@ -65,7 +66,7 @@ public class TrackClient
 
         var data = JsonNode.Parse(response)!;
 
-        bool.TryParse(data["success"]?.ToString(), out var success);
+        _ = bool.TryParse(data["success"]?.ToString(), out var success);
 
         if (!success)
             throw new SpotifyExplodeException(data["message"]!.ToString());
