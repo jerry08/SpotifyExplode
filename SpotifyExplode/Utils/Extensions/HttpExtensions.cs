@@ -83,7 +83,7 @@ internal static class HttpExtensions
     public static async ValueTask<string> PostAsync(
         this HttpClient http,
         string url,
-        Dictionary<string, string> headers,
+        IDictionary<string, string> headers,
         CancellationToken cancellationToken = default)
     {
         using var request = new HttpRequestMessage(HttpMethod.Post, url);
@@ -96,7 +96,7 @@ internal static class HttpExtensions
     public static async ValueTask<string> PostAsync(
         this HttpClient http,
         string url,
-        Dictionary<string, string>? headers,
+        IDictionary<string, string>? headers,
         HttpContent content,
         CancellationToken cancellationToken = default)
     {
@@ -112,7 +112,7 @@ internal static class HttpExtensions
     public static async ValueTask<long> GetFileSizeAsync(
         this HttpClient http,
         string url,
-        Dictionary<string, string> headers,
+        IDictionary<string, string> headers,
         CancellationToken cancellationToken = default)
     {
         using var request = new HttpRequestMessage(HttpMethod.Head, url);
@@ -151,7 +151,7 @@ internal static class HttpExtensions
     public static async ValueTask<string> ExecuteAsync(
         this HttpClient http,
         string url,
-        Dictionary<string, string> headers,
+        IDictionary<string, string> headers,
         CancellationToken cancellationToken = default)
     {
         using var request = new HttpRequestMessage(HttpMethod.Get, url);
