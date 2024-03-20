@@ -24,7 +24,7 @@ internal static class Http
     /// <returns>Random User-Agent from IE browser.</returns>
     public static string IEUserAgent()
     {
-        string windowsVersion = RandomWindowsVersion();
+        var windowsVersion = RandomWindowsVersion();
 
         string version;
         string mozillaVersion;
@@ -124,9 +124,9 @@ internal static class Http
     /// <returns>Random User-Agent from Chrome browser.</returns>
     public static string ChromeUserAgent()
     {
-        int major = Randomizer.Instance.Next(62, 70);
-        int build = Randomizer.Instance.Next(2100, 3538);
-        int branchBuild = Randomizer.Instance.Next(170);
+        var major = Randomizer.Instance.Next(62, 70);
+        var build = Randomizer.Instance.Next(2100, 3538);
+        var branchBuild = Randomizer.Instance.Next(170);
 
         return $"Mozilla/5.0 ({RandomWindowsVersion()}) AppleWebKit/537.36 (KHTML, like Gecko) " +
             $"Chrome/{major}.0.{build}.{branchBuild} Safari/537.36";
@@ -141,7 +141,7 @@ internal static class Http
     /// <returns>Random User-Agent from the Firefox browser.</returns>
     public static string FirefoxUserAgent()
     {
-        byte version = FirefoxVersions[Randomizer.Instance.Next(FirefoxVersions.Length - 1)];
+        var version = FirefoxVersions[Randomizer.Instance.Next(FirefoxVersions.Length - 1)];
 
         return $"Mozilla/5.0 ({RandomWindowsVersion()}; rv:{version}.0) Gecko/20100101 Firefox/{version}.0";
     }
@@ -194,7 +194,7 @@ internal static class Http
     /// <returns>User-Agent header value string</returns>
     public static string RandomUserAgent()
     {
-        int rand = Randomizer.Instance.Next(99) + 1;
+        var rand = Randomizer.Instance.Next(99) + 1;
 
         // TODO: edge, yandex browser, safari
 
@@ -229,8 +229,8 @@ internal static class Http
 
     private static string RandomWindowsVersion()
     {
-        string windowsVersion = "Windows NT ";
-        int random = Randomizer.Instance.Next(99) + 1;
+        var windowsVersion = "Windows NT ";
+        var random = Randomizer.Instance.Next(99) + 1;
 
         // Windows 10 = 45% popularity
         if (random >= 1 && random <= 45)

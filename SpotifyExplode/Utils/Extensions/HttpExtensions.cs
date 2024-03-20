@@ -87,7 +87,7 @@ internal static class HttpExtensions
         CancellationToken cancellationToken = default)
     {
         using var request = new HttpRequestMessage(HttpMethod.Post, url);
-        for (int j = 0; j < headers.Count; j++)
+        for (var j = 0; j < headers.Count; j++)
             request.Headers.TryAddWithoutValidation(headers.ElementAt(j).Key, headers.ElementAt(j).Value);
 
         return await http.ExecuteAsync(request, cancellationToken);
@@ -101,7 +101,7 @@ internal static class HttpExtensions
         CancellationToken cancellationToken = default)
     {
         using var request = new HttpRequestMessage(HttpMethod.Post, url);
-        for (int j = 0; j < headers?.Count; j++)
+        for (var j = 0; j < headers?.Count; j++)
             request.Headers.TryAddWithoutValidation(headers.ElementAt(j).Key, headers.ElementAt(j).Value);
 
         request.Content = content;
@@ -116,7 +116,7 @@ internal static class HttpExtensions
         CancellationToken cancellationToken = default)
     {
         using var request = new HttpRequestMessage(HttpMethod.Head, url);
-        for (int j = 0; j < headers.Count; j++)
+        for (var j = 0; j < headers.Count; j++)
             request.Headers.TryAddWithoutValidation(headers.ElementAt(j).Key, headers.ElementAt(j).Value);
 
         using var response = await http.SendAsync(
@@ -155,7 +155,7 @@ internal static class HttpExtensions
         CancellationToken cancellationToken = default)
     {
         using var request = new HttpRequestMessage(HttpMethod.Get, url);
-        for (int j = 0; j < headers.Count; j++)
+        for (var j = 0; j < headers.Count; j++)
             request.Headers.TryAddWithoutValidation(headers.ElementAt(j).Key, headers.ElementAt(j).Value);
 
         return await http.ExecuteAsync(request, cancellationToken);

@@ -98,13 +98,12 @@ public class TrackClient
 
     private async Task<KeyValuePair<string?, string?>> GetSpotifymateToken(CancellationToken cancellationToken)
     {
-        string html = await HttpExtensions.GetAsync(
-            _http,
+        var html = await _http.ExecuteAsync(
             "https://spotifymate.com/",
             cancellationToken
         );
 
-        HtmlDocument document = new HtmlDocument();
+        var document = new HtmlDocument();
         document.LoadHtml(html);
 
         var hiddenInput = document.GetElementbyId("get_video")?.SelectSingleNode("//input[@type=\"hidden\"]")?.Attributes;
@@ -122,7 +121,7 @@ public class TrackClient
         var formContent = new FormUrlEncodedContent(new KeyValuePair<string?, string?>[]
         {
             new("url", $"https://open.spotify.com/track/{trackId}"),
-            await this.GetSpotifymateToken(cancellationToken)
+            await GetSpotifymateToken(cancellationToken)
         });
 
         var response = await _http.PostAsync(
