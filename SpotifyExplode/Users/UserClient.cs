@@ -9,15 +9,12 @@ namespace SpotifyExplode.Users;
 /// <summary>
 /// Operations related to Spotify users.
 /// </summary>
-public class UserClient
+/// <remarks>
+/// Initializes an instance of <see cref="UserClient" />.
+/// </remarks>
+public class UserClient(HttpClient http)
 {
-    private readonly SpotifyHttp _spotifyHttp;
-
-    /// <summary>
-    /// Initializes an instance of <see cref="UserClient" />.
-    /// </summary>
-    public UserClient(HttpClient http) =>
-        _spotifyHttp = new SpotifyHttp(http);
+    private readonly SpotifyHttp _spotifyHttp = new(http);
 
     /// <summary>
     /// Gets the metadata associated with the specified user.

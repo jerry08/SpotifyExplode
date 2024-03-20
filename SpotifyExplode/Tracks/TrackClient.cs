@@ -14,19 +14,12 @@ namespace SpotifyExplode.Tracks;
 /// <summary>
 /// Operations related to Spotify tracks.
 /// </summary>
-public class TrackClient
+/// <remarks>
+/// Initializes an instance of <see cref="TrackClient" />.
+/// </remarks>
+public class TrackClient(HttpClient http)
 {
-    private readonly HttpClient _http;
-    private readonly SpotifyHttp _spotifyHttp;
-
-    /// <summary>
-    /// Initializes an instance of <see cref="TrackClient" />.
-    /// </summary>
-    public TrackClient(HttpClient http)
-    {
-        _http = http;
-        _spotifyHttp = new SpotifyHttp(http);
-    }
+    private readonly SpotifyHttp _spotifyHttp = new(http);
 
     /// <summary>
     /// Gets the metadata associated with the specified track.
@@ -50,7 +43,7 @@ public class TrackClient
         TrackId trackId,
         CancellationToken cancellationToken = default)
     {
-        var response = await _http.ExecuteAsync(
+        var response = await http.ExecuteAsync(
             //$"https://api.spotifydown.com/metadata/track/{trackId}",
             $"https://api.spotifydown.com/getId/{trackId}",
             new Dictionary<string, string>()
@@ -98,7 +91,7 @@ public class TrackClient
 
     private async Task<KeyValuePair<string?, string?>> GetSpotifymateToken(CancellationToken cancellationToken)
     {
-        var html = await _http.ExecuteAsync(
+        var html = await http.ExecuteAsync(
             "https://spotifymate.com/",
             cancellationToken
         );
@@ -124,7 +117,7 @@ public class TrackClient
             await GetSpotifymateToken(cancellationToken)
         });
 
-        var response = await _http.PostAsync(
+        var response = await http.PostAsync(
             "https://spotifymate.com/action",
             null,
             formContent,
@@ -153,7 +146,7 @@ public class TrackClient
             new("link", $"https://open.spotify.com/track/{trackId}")
         });
 
-        var response = await _http.PostAsync(
+        var response = await http.PostAsync(
             "https://api.spotify-downloader.com/",
             null,
             formContent,

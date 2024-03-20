@@ -11,47 +11,37 @@ namespace SpotifyExplode;
 /// <summary>
 /// Client for interacting with Spotify.
 /// </summary>
-public class SpotifyClient
+public class SpotifyClient(HttpClient http)
 {
     /// <summary>
     /// Operations related to Spotify search.
     /// </summary>
-    public SearchClient Search { get; }
+    public SearchClient Search { get; } = new SearchClient(http);
 
     /// <summary>
     /// Operations related to Spotify tracks.
     /// </summary>
-    public TrackClient Tracks { get; }
+    public TrackClient Tracks { get; } = new TrackClient(http);
 
     /// <summary>
     /// Operations related to Spotify artists.
     /// </summary>
-    public ArtistClient Artists { get; }
+    public ArtistClient Artists { get; } = new ArtistClient(http);
 
     /// <summary>
     /// Operations related to Spotify albums.
     /// </summary>
-    public AlbumClient Albums { get; }
+    public AlbumClient Albums { get; } = new AlbumClient(http);
 
     /// <summary>
     /// Operations related to Spotify playlists.
     /// </summary>
-    public PlaylistClient Playlists { get; }
+    public PlaylistClient Playlists { get; } = new PlaylistClient(http);
 
     /// <summary>
     /// Operations related to Spotify users.
     /// </summary>
-    public UserClient Users { get; }
-
-    public SpotifyClient(HttpClient http)
-    {
-        Search = new SearchClient(http);
-        Tracks = new TrackClient(http);
-        Artists = new ArtistClient(http);
-        Albums = new AlbumClient(http);
-        Playlists = new PlaylistClient(http);
-        Users = new UserClient(http);
-    }
+    public UserClient Users { get; } = new UserClient(http);
 
     /// <summary>
     /// Initializes an instance of <see cref="SpotifyClient" />.

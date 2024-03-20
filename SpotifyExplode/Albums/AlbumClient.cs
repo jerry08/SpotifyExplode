@@ -13,15 +13,12 @@ namespace SpotifyExplode.Albums;
 /// <summary>
 /// Operations related to Spotify albums.
 /// </summary>
-public class AlbumClient
+/// <remarks>
+/// Initializes an instance of <see cref="AlbumClient" />.
+/// </remarks>
+public class AlbumClient(HttpClient http)
 {
-    private readonly SpotifyHttp _spotifyHttp;
-
-    /// <summary>
-    /// Initializes an instance of <see cref="AlbumClient" />.
-    /// </summary>
-    public AlbumClient(HttpClient http) =>
-        _spotifyHttp = new SpotifyHttp(http);
+    private readonly SpotifyHttp _spotifyHttp = new(http);
 
     /// <summary>
     /// Gets the metadata associated with the specified album.

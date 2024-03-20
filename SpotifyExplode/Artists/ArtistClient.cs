@@ -13,15 +13,12 @@ namespace SpotifyExplode.Artists;
 /// <summary>
 /// Operations related to Spotify artists.
 /// </summary>
-public class ArtistClient
+/// <remarks>
+/// Initializes an instance of <see cref="ArtistClient" />.
+/// </remarks>
+public class ArtistClient(HttpClient http)
 {
-    private readonly SpotifyHttp _spotifyHttp;
-
-    /// <summary>
-    /// Initializes an instance of <see cref="ArtistClient" />.
-    /// </summary>
-    public ArtistClient(HttpClient http) =>
-        _spotifyHttp = new SpotifyHttp(http);
+    private readonly SpotifyHttp _spotifyHttp = new(http);
 
     /// <summary>
     /// Gets the metadata associated with the specified artist.

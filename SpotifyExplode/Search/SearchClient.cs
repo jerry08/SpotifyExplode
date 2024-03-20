@@ -14,15 +14,12 @@ namespace SpotifyExplode.Search;
 /// <summary>
 /// Operations related to Spotify search.
 /// </summary>
-public class SearchClient
+/// <remarks>
+/// Initializes an instance of <see cref="SearchClient" />.
+/// </remarks>
+public class SearchClient(HttpClient http)
 {
-    private readonly SpotifyHttp _spotifyHttp;
-
-    /// <summary>
-    /// Initializes an instance of <see cref="SearchClient" />.
-    /// </summary>
-    public SearchClient(HttpClient http) =>
-        _spotifyHttp = new SpotifyHttp(http);
+    private readonly SpotifyHttp _spotifyHttp = new(http);
 
     /// <summary>
     /// Gets the metadata associated with the specified artist.

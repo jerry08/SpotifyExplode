@@ -7,15 +7,8 @@ using SpotifyExplode.Utils.Extensions;
 
 namespace SpotifyExplode;
 
-internal class SpotifyHttp
+internal class SpotifyHttp(HttpClient http)
 {
-    private readonly HttpClient _http;
-
-    public SpotifyHttp(HttpClient http)
-    {
-        _http = http;
-    }
-
     public async ValueTask<string> GetAsync(
         string url,
         CancellationToken cancellationToken = default)
@@ -24,7 +17,7 @@ internal class SpotifyHttp
         using var request = new HttpRequestMessage(HttpMethod.Get, url);
         request.Headers.Authorization =
             new AuthenticationHeaderValue("Bearer", accessToken);
-        return await _http.ExecuteAsync(request, cancellationToken);
+        return await http.ExecuteAsync(request, cancellationToken);
     }
 
     private async ValueTask<string> GetAccessTokenAsync(
@@ -35,7 +28,7 @@ internal class SpotifyHttp
             "https://open.spotify.com/get_access_token?reason=transport&productType=web_player"
         );
 
-        var tokenJson = await _http.ExecuteAsync(request, cancellationToken);
+        var tokenJson = await http.ExecuteAsync(request, cancellationToken);
 
         var spotifyJsonToken = JsonNode.Parse(tokenJson)!;
 

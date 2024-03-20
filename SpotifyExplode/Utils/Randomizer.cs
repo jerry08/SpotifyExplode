@@ -9,7 +9,7 @@ namespace SpotifyExplode.Utils;
 /// </summary>
 public static class Randomizer
 {
-    private static readonly RNGCryptoServiceProvider Generator = new RNGCryptoServiceProvider();
+    private static readonly RNGCryptoServiceProvider Generator = new();
 
     private static Random Generate()
     {

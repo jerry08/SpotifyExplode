@@ -14,15 +14,12 @@ namespace SpotifyExplode.Playlists;
 /// <summary>
 /// Operations related to Spotify playlists.
 /// </summary>
-public class PlaylistClient
+/// <remarks>
+/// Initializes an instance of <see cref="PlaylistClient" />.
+/// </remarks>
+public class PlaylistClient(HttpClient http)
 {
-    private readonly SpotifyHttp _spotifyHttp;
-
-    /// <summary>
-    /// Initializes an instance of <see cref="PlaylistClient" />.
-    /// </summary>
-    public PlaylistClient(HttpClient http) =>
-        _spotifyHttp = new SpotifyHttp(http);
+    private readonly SpotifyHttp _spotifyHttp = new(http);
 
     /// <summary>
     /// Gets the metadata associated with the specified playlist.
