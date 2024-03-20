@@ -1,7 +1,7 @@
 <Project>
 
   <PropertyGroup>
-    <Version>1.0.7</Version>
+    <Version>1.0.8</Version>
     <Company>Jerro</Company>
     <Copyright>Copyright (C) Jerry Berry</Copyright>
     <LangVersion>latest</LangVersion>
