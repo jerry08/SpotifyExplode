@@ -30,7 +30,7 @@ public class Album
     [JsonPropertyName("release_date")]
     public string ReleaseDateStr { get; set; } = default!;
 
-    public DateTime? ReleaseDate => DateTime.TryParse(ReleaseDateStr, out DateTime releaseDate) ? releaseDate : null;
+    public DateTime? ReleaseDate => DateTime.TryParse(ReleaseDateStr, out var releaseDate) ? releaseDate : null;
 
     [JsonPropertyName("total_tracks")]
     public int TotalTracks { get; set; }
