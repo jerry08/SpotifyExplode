@@ -1,6 +1,6 @@
-﻿using System;
+﻿using SpotifyExplode.Utils.Extensions;
+using System;
 using System.Text.RegularExpressions;
-using SpotifyExplode.Utils.Extensions;
 
 namespace SpotifyExplode.Users;
 
@@ -22,29 +22,34 @@ public readonly partial struct UserId
 
 public partial struct UserId
 {
-    private static bool IsValid(string userId)
-    {
-        return !Regex.IsMatch(userId, @"[^0-9a-zA-Z_\-]");
-    }
+    private static readonly Regex UserUrlRegex = new Regex(@"^(https?://)?open.spotify.com/user/([^\/]*)/?");
 
     private static string? TryNormalize(string? userIdOrUrl)
     {
-        if (string.IsNullOrWhiteSpace(userIdOrUrl))
+        if (userIdOrUrl == null)
             return null;
-
-        // Id
-        // xxu0yww90v07gbh9veqta7ze0
-        if (IsValid(userIdOrUrl!))
-            return userIdOrUrl;
 
         // Regular URL
         // https://open.spotify.com/user/xxu0yww90v07gbh9veqta7ze0
-        var regularMatch = Regex.Match(userIdOrUrl, @"spotify\..+?\/user\/([a-zA-Z0-9]+)").Groups[1].Value;
-        if (!string.IsNullOrWhiteSpace(regularMatch) && IsValid(regularMatch))
-            return regularMatch;
+        Match match = UserUrlRegex.Match(userIdOrUrl);
+        if (match.Success)
+            userIdOrUrl = Uri.UnescapeDataString(match.Groups[match.Groups.Count - 1].Value);
 
-        // Invalid input
-        return null;
+        if (userIdOrUrl == "")
+            return null;
+
+        /* 
+         * Id
+         * 
+         * xxu0yww90v07gbh9veqta7ze0
+         * kasper.spotify
+         * jloðbrók
+         * 
+         * The regexp @"[^0-9a-zA-Z_\-]" leaves some ids as invalid
+         * I am certainly confused as to why spotifty would allow 'ð' to be part of an id
+         * I can't think of any way of validating this, with my limited knowledge of what is a valid spotify user id
+         */
+        return userIdOrUrl;
     }
 
     /// <summary>
