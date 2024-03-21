@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using FluentAssertions;
+﻿using FluentAssertions;
 using SpotifyExplode.Users;
 using Xunit;
 
@@ -20,7 +19,7 @@ public class IdSpecs
     [InlineData("https://open.spotify.com/user/kasper.spotify")]
     [InlineData("jloðbrók")]
     [InlineData("https://open.spotify.com/user/jlo%C3%B0br%C3%B3k")]
-    public async Task I_can_parse_user_ids(string userIdStr)
+    public void I_can_parse_user_ids(string userIdStr)
     {
         // Act
         UserId? userId = UserId.TryParse(userIdStr);
