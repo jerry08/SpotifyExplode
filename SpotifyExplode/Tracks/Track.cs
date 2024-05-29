@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 using SpotifyExplode.Albums;
 using SpotifyExplode.Artists;
+using SpotifyExplode.Common;
 
 namespace SpotifyExplode.Tracks;
 
@@ -49,6 +50,12 @@ public class Track
     [JsonPropertyName("album")]
     public Album Album { get; set; } = default!;
 
+    /// <summary>
+    /// Known external IDs for the track.
+    /// </summary>
+    [JsonPropertyName("external_ids")]
+    public ExternalIds? ExternalIds { get; set; } = default!;
+    
     /// <inheritdoc />
     [ExcludeFromCodeCoverage]
     public override string ToString() => $"Track ({Title})";

@@ -50,6 +50,12 @@ public class Album
     [JsonPropertyName("genres")]
     public List<string> Genres { get; set; } = default!;
 
+    /// <summary>
+    /// Known external IDs for the track.
+    /// </summary>
+    [JsonPropertyName("external_ids")]
+    public ExternalIds? ExternalIds { get; set; } = default!;
+    
     /// <inheritdoc />
     [ExcludeFromCodeCoverage]
     public override string ToString() => $"Album ({Name})";
