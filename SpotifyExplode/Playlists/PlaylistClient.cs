@@ -36,10 +36,10 @@ public class PlaylistClient(HttpClient http)
         var playlistJObj = JsonNode.Parse(response);
         var tracksItems = playlistJObj!["tracks"]?["items"]?.ToString() ?? playlistJObj["items"]!.ToString();
 
-        var palylist = JsonSerializer.Deserialize<Playlist>(response, JsonDefaults.Options)!;
-        palylist.Items = JsonSerializer.Deserialize<List<Item>>(tracksItems, JsonDefaults.Options)!;
+        var playlist = JsonSerializer.Deserialize<Playlist>(response, JsonDefaults.Options)!;
+        playlist.Items = JsonSerializer.Deserialize<List<Item>>(tracksItems, JsonDefaults.Options)!;
 
-        return palylist;
+        return playlist;
     }
 
     /// <summary>
