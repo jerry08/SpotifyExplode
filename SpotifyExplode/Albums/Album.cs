@@ -45,7 +45,7 @@ public class Album
     public List<Artist> Artists { get; set; } = default!;
 
     [JsonPropertyName("images")]
-    public List<Image> Images { get; set; } = default!;
+    public List<Image> Images { get; set; } = [];
 
     [JsonPropertyName("genres")]
     public List<string> Genres { get; set; } = default!;
