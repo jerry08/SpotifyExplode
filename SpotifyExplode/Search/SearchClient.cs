@@ -11,6 +11,8 @@ using SpotifyExplode.Utils;
 
 namespace SpotifyExplode.Search;
 
+using FilterTuple = (string type, Func<JsonNode?, string, IEnumerable<JsonNode>> getItems);
+
 /// <summary>
 /// Operations related to Spotify search.
 /// </summary>
@@ -19,70 +21,52 @@ namespace SpotifyExplode.Search;
 /// </remarks>
 public class SearchClient(HttpClient http)
 {
+    private static readonly IDictionary<Type, FilterTuple> _filters;
+
     private readonly SpotifyHttp _spotifyHttp = new(http);
+
+    static IEnumerable<JsonNode> GetItems(JsonNode? json, string type)
+    {
+        return json![$"{type}s"]!["items"]!.AsArray()!;
+    }
+
+    static SearchClient()
+    {
+        SearchClient._filters = new Dictionary<Type, FilterTuple>() {
+            { typeof (TrackSearchResult), ("track", GetItems) },
+            { typeof (AlbumSearchResult), ("album", GetItems) },
+            { typeof (ArtistSearchResult), ("artist", GetItems) },
+            { typeof (PlaylistSearchResult), ("playlist", GetItems) }
+        };   
+    }
 
     /// <summary>
     /// Gets the metadata associated with the specified artist.
     /// </summary>
-    public async ValueTask<List<ISearchResult>> GetResultsAsync(
+    private async ValueTask<List<SR>> GetResultsAsync<SR>(
         string query,
-        SearchFilter searchFilter = SearchFilter.Track,
         int offset = Constants.DefaultOffset,
         int limit = Constants.DefaultLimit,
-        CancellationToken cancellationToken = default)
+        CancellationToken cancellationToken = default
+    ) where SR : ISearchResult
     {
         if (limit is < Constants.MinLimit or > Constants.MaxLimit)
             throw new SpotifyExplodeException($"Limit must be between {Constants.MinLimit} and {Constants.MaxLimit}");
 
         //query = query.Replace(" ", "%");
+
         query = Uri.EscapeDataString(query);
 
-        var searchFilterStr = searchFilter switch
-        {
-            SearchFilter.Track => "&type=track",
-            SearchFilter.Album => "&type=album",
-            SearchFilter.Artist => "&type=artist",
-            SearchFilter.Playlist => "&type=playlist",
+        FilterTuple filter = _filters[typeof (SR)];
 
-            //Implement later
-            //SearchFilter.Show => "&type=show",
-            //SearchFilter.Episode => "&type=episode",
-            //SearchFilter.AudioBook => "&type=audiobook",
-
-            _ => ""
-        };
-
-        var results = new List<ISearchResult>();
-
-        var response = await _spotifyHttp.GetAsync(
-            $"https://api.spotify.com/v1/search?q={query}{searchFilterStr}&market=us&limit={limit}&offset={offset}",
+        string response = await _spotifyHttp.GetAsync(
+            $"https://api.spotify.com/v1/search?q={query}&type={filter.type}&market=us&limit={limit}&offset={offset}",
             cancellationToken
         );
 
-        switch (searchFilter)
-        {
-            case SearchFilter.Album:
-                var albums = JsonNode.Parse(response)!["albums"]!["items"]!.ToString();
-                results.AddRange(JsonSerializer.Deserialize<List<AlbumSearchResult>>(albums, JsonDefaults.Options)!);
-                break;
-
-            case SearchFilter.Artist:
-                var artists = JsonNode.Parse(response)!["artists"]!["items"]!.ToString();
-                results.AddRange(JsonSerializer.Deserialize<List<ArtistSearchResult>>(artists, JsonDefaults.Options)!);
-                break;
-
-            case SearchFilter.Playlist:
-                var playlists = JsonNode.Parse(response)!["playlists"]!["items"]!.ToString();
-                results.AddRange(JsonSerializer.Deserialize<List<PlaylistSearchResult>>(playlists, JsonDefaults.Options)!);
-                break;
-
-            case SearchFilter.Track:
-                var tracks = JsonNode.Parse(response)!["tracks"]!["items"]!.ToString();
-                results.AddRange(JsonSerializer.Deserialize<List<TrackSearchResult>>(tracks, JsonDefaults.Options)!);
-                break;
-        }
-
-        return results;
+        return filter.getItems(JsonNode.Parse(response), filter.type)
+            .Select(json => JsonSerializer.Deserialize<SR>(json, JsonDefaults.Options)!)
+            !.ToList();
     }
 
     /// <summary>
@@ -93,8 +77,7 @@ public class SearchClient(HttpClient http)
         int offset = Constants.DefaultOffset,
         int limit = Constants.DefaultLimit,
         CancellationToken cancellationToken = default) =>
-        (await GetResultsAsync(query, SearchFilter.Album, offset, limit, cancellationToken))
-            .OfType<AlbumSearchResult>().ToList();
+        await GetResultsAsync<AlbumSearchResult>(query, offset, limit, cancellationToken);
 
     /// <summary>
     /// Gets artist search results returned by the specified query.
@@ -104,8 +87,7 @@ public class SearchClient(HttpClient http)
         int offset = Constants.DefaultOffset,
         int limit = Constants.DefaultLimit,
         CancellationToken cancellationToken = default) =>
-        (await GetResultsAsync(query, SearchFilter.Artist, offset, limit, cancellationToken))
-            .OfType<ArtistSearchResult>().ToList();
+        await GetResultsAsync<ArtistSearchResult>(query, offset, limit, cancellationToken);
 
     /// <summary>
     /// Gets playlist search results returned by the specified query.
@@ -115,8 +97,7 @@ public class SearchClient(HttpClient http)
         int offset = Constants.DefaultOffset,
         int limit = Constants.DefaultLimit,
         CancellationToken cancellationToken = default) =>
-        (await GetResultsAsync(query, SearchFilter.Playlist, offset, limit, cancellationToken))
-            .OfType<PlaylistSearchResult>().ToList();
+        await GetResultsAsync<PlaylistSearchResult>(query, offset, limit, cancellationToken);
 
     /// <summary>
     /// Gets track search results returned by the specified query.
@@ -126,6 +107,5 @@ public class SearchClient(HttpClient http)
         int offset = Constants.DefaultOffset,
         int limit = Constants.DefaultLimit,
         CancellationToken cancellationToken = default) =>
-        (await GetResultsAsync(query, SearchFilter.Track, offset, limit, cancellationToken))
-            .OfType<TrackSearchResult>().ToList();
+        await GetResultsAsync<TrackSearchResult>(query, offset, limit, cancellationToken);
 }

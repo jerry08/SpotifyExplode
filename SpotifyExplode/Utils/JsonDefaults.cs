@@ -24,7 +24,6 @@ internal static class JsonDefaults
         options.Converters.Add(new PlaylistIdJsonConverter());
         options.Converters.Add(new AlbumIdJsonConverter());
         options.Converters.Add(new ArtistIdJsonConverter());
-        options.Converters.Add(new UserIdJsonConverter());
 
         return options;
     }

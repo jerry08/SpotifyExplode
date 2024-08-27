@@ -10,7 +10,7 @@ namespace SpotifyExplode.Users;
 public class User
 {
     [JsonPropertyName("id")]
-    public UserId Id { get; set; }
+    public string Id { get; set; } = default!;
 
     [JsonPropertyName("display_name")]
     public string DisplayName { get; set; } = default!;
