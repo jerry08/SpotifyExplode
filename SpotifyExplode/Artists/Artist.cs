@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
 using SpotifyExplode.Common;
 using SpotifyExplode.Playlists;
@@ -21,8 +22,12 @@ public class Artist
     public List<string> Genres { get; set; } = default!;
 
     [JsonPropertyName("images")]
-    public List<Image> Images { get; set; } = default!;
+    public List<Image> Images { get; set; } = [];
 
     [JsonPropertyName("popularity")]
     public int Popularity { get; set; }
+
+    /// <inheritdoc />
+    [ExcludeFromCodeCoverage]
+    public override string ToString() => $"Artist ({Name})";
 }

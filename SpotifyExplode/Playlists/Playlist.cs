@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
+using SpotifyExplode.Common;
 using SpotifyExplode.Tracks;
 using SpotifyExplode.Users;
 
@@ -15,6 +17,9 @@ public class Playlist
 
     [JsonPropertyName("description")]
     public string Description { get; set; } = default!;
+
+    [JsonPropertyName("images")]
+    public List<Image> Images { get; set; } = [];
 
     [JsonPropertyName("followers")]
     public Follower Followers { get; set; } = default!;
@@ -52,4 +57,8 @@ public class Playlist
 
     [JsonIgnore]
     public List<Track> Tracks => Items.ConvertAll(x => x.Track);
+
+    /// <inheritdoc />
+    [ExcludeFromCodeCoverage]
+    public override string ToString() => $"Playlist ({Name})";
 }

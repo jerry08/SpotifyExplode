@@ -45,11 +45,17 @@ public class Album
     public List<Artist> Artists { get; set; } = default!;
 
     [JsonPropertyName("images")]
-    public List<Image> Images { get; set; } = default!;
+    public List<Image> Images { get; set; } = [];
 
     [JsonPropertyName("genres")]
     public List<string> Genres { get; set; } = default!;
 
+    /// <summary>
+    /// Known external IDs for the track.
+    /// </summary>
+    [JsonPropertyName("external_ids")]
+    public ExternalIds? ExternalIds { get; set; } = default!;
+    
     /// <inheritdoc />
     [ExcludeFromCodeCoverage]
     public override string ToString() => $"Album ({Name})";

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net.Http;
 using System.Text.Json;
 using System.Text.Json.Nodes;
@@ -39,6 +41,7 @@ public class TrackClient(HttpClient http)
     /// <summary>
     /// Gets the best match YouTube ID using <see href="https://spotifydown.com/">spotifydown.com</see>.
     /// </summary>
+    [Obsolete("This method doesn't work anymore because api.spotifydown.com has changed")]
     public async ValueTask<string?> GetYoutubeIdAsync(
         TrackId trackId,
         CancellationToken cancellationToken = default)
@@ -74,13 +77,20 @@ public class TrackClient(HttpClient http)
         TrackId trackId,
         CancellationToken cancellationToken = default)
     {
-        var url = "";
+        var url = string.Empty;
 
         try
         {
-            url = await GetSpotifyDownloaderUrlAsync(trackId, cancellationToken);
+            url = await GetSpotifyDownUrlAsync(trackId, cancellationToken);
         }
-        catch { }
+        catch (SpotifyExplodeException)
+        {
+            if (!Debugger.IsAttached)
+                throw;
+        }
+        catch
+        {
+        }
 
         // Fallback
         if (string.IsNullOrEmpty(url))
@@ -135,24 +145,33 @@ public class TrackClient(HttpClient http)
     }
 
     /// <summary>
-    /// Gets download link from <see href="https://spotify-downloader.com/">spotify-downloader.com</see>
+    /// Gets download link from <see href="https://spotifydown.com/">spotifydown.com</see>
     /// </summary>
-    public async ValueTask<string?> GetSpotifyDownloaderUrlAsync(
+    public async ValueTask<string?> GetSpotifyDownUrlAsync(
         TrackId trackId,
         CancellationToken cancellationToken = default)
     {
-        var formContent = new FormUrlEncodedContent(new KeyValuePair<string?, string?>[]
-        {
-            new("link", $"https://open.spotify.com/track/{trackId}")
-        });
-
-        var response = await http.PostAsync(
-            "https://api.spotify-downloader.com/",
-            null,
-            formContent,
+        var response = await http.ExecuteAsync(
+            $"https://api.spotifydown.com/download/{trackId}",
+            new Dictionary<string, string>()
+            {
+                { "referer", "https://spotifydown.com/" },
+                { "origin", "https://spotifydown.com" },
+                { "host", "api.spotifydown.com" },
+            },
             cancellationToken
         );
 
-        return JsonNode.Parse(response)!["audio"]?["url"]?.ToString();
+        if (string.IsNullOrEmpty(response))
+            return null;
+
+        var data = JsonNode.Parse(response)!;
+
+        _ = bool.TryParse(data["success"]?.ToString(), out var success);
+
+        if (!success)
+            throw new SpotifyExplodeException(data["message"]!.ToString());
+
+        return JsonNode.Parse(response)?["link"]!.ToString();
     }
 }

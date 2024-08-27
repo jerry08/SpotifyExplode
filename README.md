@@ -4,7 +4,7 @@
 </h1>
 
 <p align="center">
-   <a href="https://discord.gg/mhxsSMy2Nf"><img src="https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white"></a>
+   <a href="https://discord.gg/U7XweVubJN"><img src="https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white"></a>
    <a href="https://nuget.org/packages/SpotifyExplode"><img src="https://img.shields.io/nuget/dt/SpotifyExplode.svg?label=Downloads&color=%233DDC84&logo=nuget&logoColor=%23fff&style=for-the-badge"></a>
 </p>
 
@@ -255,7 +255,7 @@ foreach (var result in await spotify.Search.GetResultsAsync("banda neira"))
 ```
 
 ### Downloading
-You can get the download url from a track by calling `Tracks.GetYoutubeIdAsync(...)`.
+You can get the download url from a track by calling `Tracks.GetDownloadUrlAsync(...)`.
 
 ```csharp
 using SpotifyExplode;
