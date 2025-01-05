@@ -38,6 +38,8 @@ public class PlaylistClient(HttpClient http)
 
         var playlist = JsonSerializer.Deserialize<Playlist>(response, JsonDefaults.Options)!;
         playlist.Items = JsonSerializer.Deserialize<List<Item>>(tracksItems, JsonDefaults.Options)!;
+        playlist.Total = (playlistJObj!["total"] ?? playlistJObj!["tracks"]?["total"])!
+            .AsValue().GetValue<int>();
 
         return playlist;
     }
